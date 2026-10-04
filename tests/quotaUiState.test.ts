@@ -46,6 +46,16 @@ afterAll(() => {
 });
 
 describe('quota ui state', () => {
+  test('remembers ledger or cards without overwriting tab and sorting', () => {
+    writeQuotaUiState({ tab: 'claude', sortMode: 'soonest' });
+    writeQuotaUiState({ viewMode: 'cards' });
+    expect(readQuotaUiState()).toEqual({ tab: 'claude', sortMode: 'soonest', viewMode: 'cards' });
+    writeQuotaUiState({ viewMode: 'ledger' });
+    expect(readQuotaUiState()?.viewMode).toBe('ledger');
+    storage.setItem(KEY, JSON.stringify({ viewMode: 'invalid' }));
+    expect(readQuotaUiState()?.viewMode).toBeUndefined();
+  });
+
   test('round-trips both preferences', () => {
     writeQuotaUiState({ tab: 'codex', sortMode: 'soonest' });
     expect(readQuotaUiState()).toEqual({ tab: 'codex', sortMode: 'soonest' });
