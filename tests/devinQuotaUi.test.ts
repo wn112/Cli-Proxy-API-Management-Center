@@ -11,6 +11,7 @@ import { classifyQuotaFiles, buildTabCounts } from '@/features/quota/logic';
 import { QUOTA_PROVIDER_TYPES } from '@/features/authFiles/constants';
 import { buildTimelineLane, projectLane } from '@/features/quota/quotaTimelineModel';
 import { collectQuotaRowInstants, nextRecoveryMs } from '@/features/quota/resetSchedule';
+import { formatInstantShort } from '@/utils/quota';
 import {
   captureQuotaCacheGeneration,
   commitIfQuotaCacheCurrent,
@@ -71,9 +72,9 @@ describe('Devin quota UI integration', () => {
     expect(markup).toContain('width:0%');
     expect(markup).toContain('width:80%');
     expect(markup).toContain('Pro');
-    expect(markup).toContain('01/02');
-    expect(markup).toContain('01/08');
-    expect(markup).not.toContain('01/01');
+    expect(markup).toContain(formatInstantShort(Date.parse('2099-01-02T00:00:00Z')));
+    expect(markup).toContain(formatInstantShort(Date.parse('2099-01-08T00:00:00Z')));
+    expect(markup).not.toContain(formatInstantShort(observedAtMs));
     expect(markup).not.toContain(classes.quotaMessage);
   });
 
